@@ -1,11 +1,23 @@
 cff-version: 1.2.0
-message: "If you use this code or data, please cite the article below."
-title: "From avoided emissions to potential credits: helicopter-to-eVTOL substitution in São Paulo (code and data)"
+message: "If you use this repository, please cite the published article in preferred-citation."
+title: "eVTOL emissions and potential carbon credits in São Paulo: code and reproducibility materials"
+type: software
+date-released: 2026-10-12
+repository-code: "https://github.com/Orbolato/eVTOL-Emissions-Carbon-Credits-Sao-Paulo"
+url: "https://orbolato.github.io/publications/evtol-emissions-carbon-credits/"
+keywords:
+  - eVTOL
+  - urban air mobility
+  - aviation emissions
+  - carbon credits
+  - Monte Carlo simulation
+  - São Paulo
 authors:
   - family-names: Rodrigues
     given-names: Jaqueline Fonseca
   - family-names: Carvalho
     given-names: Lucas Orbolato
+    orcid: "https://orcid.org/0000-0002-8402-5832"
   - family-names: Gomes
     given-names: Igor Galhano
   - family-names: Pagani
@@ -26,6 +38,7 @@ preferred-citation:
       given-names: Jaqueline Fonseca
     - family-names: Carvalho
       given-names: Lucas Orbolato
+      orcid: "https://orcid.org/0000-0002-8402-5832"
     - family-names: Gomes
       given-names: Igor Galhano
     - family-names: Pagani

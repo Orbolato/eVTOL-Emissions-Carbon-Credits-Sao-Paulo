@@ -2,11 +2,25 @@
 output/*
 !output/.gitkeep
 
+# Restricted / non-redistributable upstream operational material
+data/raw/
+data/**/raw/
+**/BIMTRA.csv
+**/BIMTRA.xlsx
+**/BIMTRA.Rda
+**/BIMTRA.RData
+*.scn
+*.log
+
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
 
 # OS / editors
 .DS_Store
 Thumbs.db
 .vscode/
+.idea/

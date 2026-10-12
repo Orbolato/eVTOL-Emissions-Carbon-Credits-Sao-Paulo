@@ -1,5 +1,20 @@
-# Normalize line endings of code and text files
+# Normalize repository text files
 * text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.cff text eol=lf
 
-# Keep data files byte-for-byte as committed
-data/** -text
+# Preserve committed research-data bytes exactly
+data/**/*.csv -text
+data/**/*.png -text
+data/**/*.jpg -text
+data/**/*.jpeg -text
+
+# Generated/binary scientific outputs
+*.pdf -text
+*.png -text
+*.jpg -text
+*.jpeg -text

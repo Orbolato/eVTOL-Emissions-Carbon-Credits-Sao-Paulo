@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "description": "Exact Git-blob identities and byte sizes for the public research-data artifacts committed with the repository.",
+  "hash_algorithm": "git-blob-sha1",
+  "artifacts": [
+    {"path": "data/simulation/aircraft_flight_times.csv", "bytes": 5130, "git_blob_sha1": "0ff85f5e48dca93d85f576178e0de2f2ab90c557"},
+    {"path": "data/simulation/aircraft_type_counts.csv", "bytes": 114, "git_blob_sha1": "6e71cecdc49a053025f93d3080be08a7a705b8b9"},
+    {"path": "data/simulation/bluesky_scenario_summary.csv", "bytes": 518, "git_blob_sha1": "76361b5ed77a7d12a094487678923c15aa0835b0"},
+    {"path": "data/grid_emission_factor/sin_operating_margin_daily_2023_2024.csv", "bytes": 22601, "git_blob_sha1": "1c6c577684b5c51f6180c000492d92ee86f6f0ea"},
+    {"path": "data/figure_sources/aerodrome_red_marker.png", "bytes": 2689, "git_blob_sha1": "fec97a3402f9328854d8179ffc8f27e4fd16147c"},
+    {"path": "data/figure_sources/bluesky_bimtra_mvp_120.jpg", "bytes": 41640, "git_blob_sha1": "0c11460aeb4d2f2aa350ed6761bc51704616a10f"},
+    {"path": "data/figure_sources/bluesky_bimtra_mvp_60.jpg", "bytes": 38004, "git_blob_sha1": "cdcdcaaa98a321920e80327f7a6c87f3e42d91d9"},
+    {"path": "data/figure_sources/bluesky_bimtra_mvp_off.jpg", "bytes": 41603, "git_blob_sha1": "77273ab341ba731c7e8c5e891f594544687a7ce3"},
+    {"path": "data/figure_sources/ctr.png", "bytes": 825654, "git_blob_sha1": "a1552b252c7e54b94ae5e1bd40adddc4008d16d8"}
+  ]
+}
