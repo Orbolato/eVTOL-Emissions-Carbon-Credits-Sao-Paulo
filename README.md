@@ -1,33 +1,47 @@
 # Avoided emissions and potential carbon credits of helicopter-to-eVTOL substitution in São Paulo
 
-Code and data for the article:
+[![reproducibility](https://github.com/Orbolato/eVTOL-Emissions-Carbon-Credits-Sao-Paulo/actions/workflows/reproducibility.yml/badge.svg)](https://github.com/Orbolato/eVTOL-Emissions-Carbon-Credits-Sao-Paulo/actions/workflows/reproducibility.yml)
 
-> Rodrigues, J.F., Carvalho, L.O., Gomes, I.G., Pagani, R.N., Murça, M.C.R., Caldeira, S.S.,
-> Guterres, M.X., Pamplona, D.A. (2026). **From avoided emissions to potential credits: A
-> simulation-based case study of helicopter-to-eVTOL substitution in São Paulo.** *Case Studies on
-> Transport Policy*, 25, 101884. https://doi.org/10.1016/j.cstp.2026.101884
+Code, public aggregate inputs, and reproducibility materials for:
 
-The study converts simulated helicopter activity in the São Paulo Metropolitan Region (RMSP) into
-energy use, CO₂e emissions and potential carbon credits, comparing a helicopter fleet-mix baseline
-with an eVTOL replacement case:
+> Rodrigues, J.F., Carvalho, L.O., Gomes, I.G., Pagani, R.N., Murça, M.C.R., Caldeira, S.S., Guterres, M.X., Pamplona, D.A. (2026). **From avoided emissions to potential credits: A simulation-based case study of helicopter-to-eVTOL substitution in São Paulo.** *Case Studies on Transport Policy*, 25, 101884. https://doi.org/10.1016/j.cstp.2026.101884
 
-1. **Scenario and simulation**: 146 helicopter operations with origin and destination in the RMSP,
-   taken from the busiest day in the Brazilian Air Traffic Movement Information Database (BIMTRA),
-   routed over the Helicopter Special Routes (REH) and simulated in
-   [BlueSky](https://github.com/TUDelft-CNS-ATM/bluesky) without conflict resolution and with MVP
-   conflict resolution (60 s and 120 s lookahead). The simulation gives the aggregated 3D flight
-   distance *D*<sub>3D</sub>, flight times and safety events.
-2. **Accounting**: *D*<sub>3D</sub> → fuel or electricity → CO₂e → avoided emissions and potential
-   credits (1 credit = 1 tCO₂e), using a BIMTRA-weighted helicopter fleet mix and the Aurora PAV
-   (with a Volocopter benchmark) as the eVTOL.
-3. **Uncertainty**: Monte Carlo analysis (10,000 iterations) with Spearman-based sensitivity.
+Publication page: https://orbolato.github.io/publications/evtol-emissions-carbon-credits/
+
+## Study overview
+
+The study converts simulated helicopter activity in the São Paulo Metropolitan Region (RMSP) into energy use, CO2e emissions, avoided emissions, and **potential** carbon credits, comparing a helicopter fleet-mix baseline with an eVTOL replacement case.
+
+The public analysis package contains three stages:
+
+1. **Aggregated simulation results.** A 146-operation BIMTRA-derived day was simulated over the Helicopter Special Routes (REH) in BlueSky under three settings: no conflict resolution, MVP with 60 s lookahead, and MVP with 120 s lookahead. The repository contains aggregate scenario outputs, not the restricted flight-level BIMTRA records or flight-level BlueSky scenario/log files.
+2. **Energy and emissions accounting.** Aggregated 3D distance is converted to helicopter fuel use or eVTOL electricity demand, then to CO2e. The central MVP 60 s case produces approximately 10.27 tCO2e of avoided emissions for full replacement under the study assumptions.
+3. **Uncertainty analysis.** A 10,000-iteration Monte Carlo analysis, using seed 42, varies fuel density, helicopter fuel intensity, charging efficiency, eVTOL energy intensity, fixed per-flight eVTOL energy, and the empirical 2023–2024 SIN operating-margin emission factor.
+
+The carbon-credit calculation is an accounting translation of avoided emissions using 1 potential credit = 1 tCO2e. It is **not** a claim of certified, issued, tradable, or registry-eligible credits.
+
+## Reproducibility scope
+
+This repository is intentionally explicit about what can and cannot be reproduced publicly.
+
+| Level | Publicly supported? | Meaning |
+|---|---:|---|
+| Exact committed-artifact verification | Yes | CI verifies the committed research-data artifacts byte-for-byte using `ARTIFACTS.json`. |
+| Downstream emissions/accounting rerun | Yes | `python run_all.py` regenerates the fleet-mix analysis, flight-time summaries, deterministic accounting, Monte Carlo outputs, and annotated figures from the committed aggregate inputs. |
+| Raw BIMTRA -> BlueSky reconstruction | No | Flight-level BIMTRA records and flight-level BlueSky scenarios/logs are restricted and are not redistributed. |
+
+See [`PROVENANCE.md`](PROVENANCE.md) for the complete provenance and reproducibility boundary and [`data/README.md`](data/README.md) for the data inventory.
 
 ## Repository structure
 
-```
+```text
 .
-├── run_all.py                          # runs all scripts in order
+├── README.md
+├── CITATION.cff
+├── PROVENANCE.md
+├── ARTIFACTS.json
 ├── requirements.txt
+├── run_all.py
 ├── scripts/
 │   ├── 01_helicopter_fleet_mix.py
 │   ├── 02_flight_time_histograms.py
@@ -36,47 +50,54 @@ with an eVTOL replacement case:
 │   ├── 05_annotate_context_map.py
 │   └── 06_annotate_bluesky_snapshots.py
 ├── data/
-│   ├── simulation/                     # aggregated BlueSky outputs
-│   ├── grid_emission_factor/           # daily SIN emission factors 2023-2024
-│   └── figure_sources/                 # map and simulator screenshots used in Figs. 1, 2, 4, 6
-└── output/                             # created by the scripts
+│   ├── README.md
+│   ├── simulation/                 # public aggregate BlueSky-derived inputs
+│   ├── grid_emission_factor/       # archived daily SIN factors, 2023-2024
+│   └── figure_sources/             # archived base images for figure annotation
+├── tests/
+└── output/                         # generated; ignored except .gitkeep
 ```
 
-## Requirements
+## Environment
 
-Python (≥ 3.10) with the packages in `requirements.txt`:
+The tested public-analysis environment is Python 3.12 with exact package versions pinned in `requirements.txt`:
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
-Tested with Python 3.12 on Windows 10.
+The pinned environment is also installed by GitHub Actions before the public downstream analysis is rerun.
 
-## How to run
+## Run the public analysis
+
+From the repository root:
 
 ```bash
 python run_all.py
 ```
 
-All results are written to `output/` in a few seconds. The scripts can also be run one at a time in
-numerical order; script `03` uses outputs of `01` and `02`.
+`run_all.py` performs an input preflight check, executes the six numbered scripts in order, and writes generated results to `output/`.
+
+The scripts can also be run individually in numerical order. Script `03` depends on the generated outputs of scripts `01` and `02`.
 
 ## Scripts
 
-| Script | What it does |
+| Script | Role |
 |---|---|
-| `01_helicopter_fleet_mix.py` | Fuel intensity (capacity / range) of the six most frequent helicopter types and the operation-weighted fleet-mix intensity, 1.1137 L/km (Table 1). |
-| `02_flight_time_histograms.py` | Flight-time histograms and summary statistics of the three BlueSky scenarios. |
-| `03_emissions_accounting.py` | Applies Eqs. (4)–(12) to the 3D distance of each scenario: operational metrics, fuel and electricity use, CO₂e, avoided emissions and potential credits (Tables 3–9). |
-| `04_monte_carlo.py` | Monte Carlo analysis with 10,000 iterations (seed 42) and Spearman sensitivity (Table 10, Figs. 8–11). The summary statistics of Table 10 are printed to the console. |
-| `05_annotate_context_map.py` | Adds the label and legend to the REH/CTR context map (Fig. 1). |
-| `06_annotate_bluesky_snapshots.py` | Adds labels and legends to the BlueSky screenshots (Figs. 2, 4, 6). |
+| `01_helicopter_fleet_mix.py` | Computes fuel intensity for the six most frequent helicopter families and the operation-weighted fleet-mix intensity used by the study. |
+| `02_flight_time_histograms.py` | Generates flight-time histograms and summary statistics for the three public aggregate BlueSky scenarios. |
+| `03_emissions_accounting.py` | Applies the deterministic activity -> energy -> CO2e -> avoided-emissions accounting for Tables 3–9. |
+| `04_monte_carlo.py` | Runs 10,000 seeded Monte Carlo iterations and the Spearman-based correlation sensitivity analysis used for Figs. 8–11 and associated diagnostics. |
+| `05_annotate_context_map.py` | Recreates the annotation layer applied to the archived REH/CTR context-map image. |
+| `06_annotate_bluesky_snapshots.py` | Recreates the annotation layers applied to the three archived BlueSky screenshots. |
 
-The short interpretation printed at the end of `04_monte_carlo.py` is in Portuguese.
+### Sensitivity-analysis terminology
 
-## Where each figure and table comes from
+The primary sensitivity diagnostic is Spearman rank correlation. The historical `04_monte_carlo.py` also retains a second normalized column/plot whose legacy comments refer to “Sobol”/“partial correlation,” but its implementation repeats the same absolute Spearman transformation. It should **not** be interpreted as a Sobol index or as an independent partial-correlation estimator. The legacy output is retained for traceability; see `PROVENANCE.md`.
 
-| Article | Script | Output |
+## Article outputs
+
+| Article item | Script | Generated output |
 |---|---|---|
 | Table 1 | `01` | `output/helicopter_mix_parameters.csv` |
 | Tables 3–5 | `03` | `output/operational_metrics.csv` |
@@ -84,62 +105,62 @@ The short interpretation printed at the end of `04_monte_carlo.py` is in Portugu
 | Table 7 | `03` | `output/evtol_model_sensitivity.csv` |
 | Table 8 | `03` | `output/operational_distance_sensitivity.csv` |
 | Table 9 | `03` | `output/replacement_share.csv` |
-| Table 10 | `04` | console output; input ranges in `output/parameter_correlations.csv` |
-| Fig. 1 | `05` | `output/ctr_annotated.png` |
-| Figs. 2, 4, 6 | `06` | `output/bluesky_bimtra_mvp_off_annotated.png`, `..._mvp_60_annotated.png`, `..._mvp_120_annotated.png` |
-| Figs. 3, 5, 7 | `02` | `output/flight_times_histogram_no_mvp.pdf`, `flight_times_histogram.pdf`, `flight_times_histogram_mvp120.pdf` |
+| Fig. 1 | `05` | `output/ctr_annotated.png` / `.pdf` |
+| Figs. 2, 4, 6 | `06` | annotated BlueSky screenshot files |
+| Figs. 3, 5, 7 | `02` | scenario flight-time histogram PDFs |
 | Fig. 8 | `04` | `output/03_emission_reduction_distribution.pdf` |
 | Fig. 9 | `04` | `output/01_sensitivity_spearman.pdf` |
 | Fig. 10 | `04` | `output/04_efgrid_historical_distribution.pdf` |
 | Fig. 11 | `04` | `output/05_parameter_output_correlation.pdf` |
 
-Table 2 lists the input parameters; they are set at the top of scripts `01`, `03` and `04`.
+Table 2 contains model/input parameters. The corresponding analysis values are defined near the top of scripts `01`, `03`, and `04`.
 
-## Data
+## Public data
 
-### Simulation outputs (`data/simulation/`)
+### Aggregate simulation inputs
 
-The BlueSky scenario files and the flight-level simulation outputs are not included, because they
-contain individual BIMTRA flight records (aircraft registration, type, departure time and route),
-which cannot be redistributed. This folder holds the aggregated results of the three runs.
+`data/simulation/` contains only aggregate/de-identified products used by the downstream analysis:
 
-| File | Content |
-|---|---|
-| `bluesky_scenario_summary.csv` | One row per scenario: number of operations, simulated time, total flight hours, total 3D distance (NM), LOWC/NMAC/MAC event counts, conflict-resolution alerts and the event thresholds |
-| `aircraft_flight_times.csv` | Flight time per aircraft (s) in each scenario, without aircraft identifiers and sorted by value |
-| `aircraft_type_counts.csv` | Number of operations per aircraft type code in the scenario |
+- `bluesky_scenario_summary.csv`: scenario-level distance, time, safety events, conflict-resolution alerts, and event thresholds;
+- `aircraft_flight_times.csv`: scenario label and flight time only, with aircraft identifiers removed;
+- `aircraft_type_counts.csv`: aggregate operation counts by aircraft type code.
 
-Simulation settings: conflict resolution off, or MVP with a 60 s or 120 s lookahead; protected-zone
-radius 500 m. Event thresholds: loss of well-clear (LOWC) < 500 m horizontal; near mid-air
-collision (NMAC) < 150 m horizontal and < 30 m vertical; mid-air collision (MAC) < 10 m horizontal
-and < 30 m vertical.
+The original BIMTRA flight-level records and the flight-level BlueSky scenarios/logs are excluded.
 
-### Grid emission factor (`data/grid_emission_factor/`)
+Simulation settings represented by the aggregate inputs are conflict resolution off, MVP with 60 s lookahead, and MVP with 120 s lookahead. Event thresholds are LOWC < 500 m horizontally, NMAC < 150 m horizontally and < 30 m vertically, and MAC < 10 m horizontally and < 30 m vertically.
 
-`sin_operating_margin_daily_2023_2024.csv`: daily operating-margin CO₂ emission factor of the
-Brazilian National Interconnected System (SIN), 2023–2024 (731 days, kgCO₂/kWh), from the
-[Ministry of Science, Technology and Innovation (MCTI)](https://www.gov.br/mcti/pt-br/acompanhe-o-mcti/sirene/dados-e-ferramentas/fatores-de-emissao).
-It is sampled in the Monte Carlo analysis.
+### Grid emission factor
 
-### Figure sources (`data/figure_sources/`)
+`data/grid_emission_factor/sin_operating_margin_daily_2023_2024.csv` contains 731 daily operating-margin CO2 emission factors for the Brazilian National Interconnected System (SIN), spanning 2023-01-01 through 2024-12-31. The study identifies MCTI/SIRENE as the source. The Monte Carlo analysis samples the empirical daily values with replacement.
 
-| File | Content |
-|---|---|
-| `ctr.png` | Interactive Leaflet map (R) of the REH routes, control zones (CTRs), helipads and aerodromes |
-| `aerodrome_red_marker.png` | Aerodrome marker used in the Fig. 1 legend |
-| `bluesky_bimtra_mvp_off.jpg`, `bluesky_bimtra_mvp_60.jpg`, `bluesky_bimtra_mvp_120.jpg` | BlueSky screenshots of the three scenarios |
+No separate license is asserted for this source dataset; source-provider terms remain applicable.
+
+### Figure sources
+
+`data/figure_sources/` contains the archived base images used to create the annotated manuscript figures. The annotation scripts reproduce the added labels and legends; they do not reconstruct the original map or BlueSky states from raw data.
+
+## Automated verification
+
+GitHub Actions runs the following checks on pushes and pull requests:
+
+1. installs the pinned Python 3.12 analysis environment;
+2. compiles all Python sources;
+3. verifies every artifact listed in `ARTIFACTS.json` byte-for-byte;
+4. checks the scenario, fleet-mix, grid-factor, and de-identification data contracts;
+5. verifies that common raw BIMTRA and flight-level BlueSky artifacts are absent;
+6. reruns `python run_all.py`; and
+7. checks key generated numerical results and expected figure/table outputs.
+
+The numerical checks include the 146-operation central scenario, the 127-operation six-family fleet-mix subset, the central 3D distance, and the central helicopter/eVTOL CO2e accounting.
 
 ## Citation
 
-If you use this code or data, please cite the article (see also `CITATION.cff`):
+If you use this repository, please cite the published article. `CITATION.cff` contains machine-readable repository metadata and the preferred article citation.
 
 ```bibtex
 @article{Rodrigues2026eVTOL,
-  title   = {From avoided emissions to potential credits: A simulation-based case study of
-             helicopter-to-{eVTOL} substitution in S{\~a}o Paulo},
-  author  = {Rodrigues, Jaqueline Fonseca and Carvalho, Lucas Orbolato and Gomes, Igor Galhano and
-             Pagani, Regina Negri and Mur{\c{c}}a, Mayara Cond{\'e} Rocha and Caldeira, Samuel da Silva and
-             Guterres, Marcelo Xavier and Pamplona, Daniel Alberto},
+  title   = {From avoided emissions to potential credits: A simulation-based case study of helicopter-to-{eVTOL} substitution in S{\~a}o Paulo},
+  author  = {Rodrigues, Jaqueline Fonseca and Carvalho, Lucas Orbolato and Gomes, Igor Galhano and Pagani, Regina Negri and Mur{\c{c}}a, Mayara Cond{\'e} Rocha and Caldeira, Samuel da Silva and Guterres, Marcelo Xavier and Pamplona, Daniel Alberto},
   journal = {Case Studies on Transport Policy},
   volume  = {25},
   pages   = {101884},
@@ -147,3 +168,7 @@ If you use this code or data, please cite the article (see also `CITATION.cff`):
   doi     = {10.1016/j.cstp.2026.101884}
 }
 ```
+
+## License and third-party terms
+
+No software or data license is granted by this repository unless a separate license file is added in the future. Third-party source terms remain applicable to source data, software, map content, and other external materials.
