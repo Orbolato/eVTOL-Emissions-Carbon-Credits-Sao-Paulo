@@ -148,10 +148,12 @@ else:
     sensitivities_pct = {k: 0 for k in sensitivities.keys()}
 
 # ============================================================================
-# 5. ALTERNATIVE METHOD: Sobol Indices (First-order effects)
+# 5. LEGACY DUPLICATE SPEARMAN DIAGNOSTIC (NOT SOBOL / NOT PARTIAL CORRELATION)
 # ============================================================================
 
-# Calculate coefficient of partial correlation
+# Historical compatibility output: this repeats the absolute Spearman
+# transformation above. It is retained for traceability, but it is not a
+# Sobol index and not a statistically distinct partial-correlation estimate.
 partial_correlations = {}
 
 for param_name in df_params.columns:
@@ -166,8 +168,8 @@ for param_name in df_params.columns:
         if np.isnan(corr_output):
             partial_correlations[param_name] = 0
         else:
-            # Partial correlation coefficient (simplified approach)
-            # represents the individual contribution after accounting for others
+            # Legacy duplicate of the absolute Spearman diagnostic.
+            # Do not interpret this as an independent partial correlation.
             partial_correlations[param_name] = abs(corr_output)
 
 # Normalize
@@ -224,7 +226,7 @@ plt.savefig(rev_dir / '01_sensitivity_spearman.pdf', bbox_inches='tight')
 print("Saved: 01_sensitivity_spearman.pdf")
 plt.close()
 
-# Plot 2: Partial Correlation Method (Separate)
+# Plot 2: legacy duplicate Spearman diagnostic (retained for traceability)
 plt.figure(figsize=(12, 7))
 params_sorted_2 = sorted(partial_contributions_pct.items(), key=lambda x: x[1], reverse=True)
 # Filter out parameters with 0 contribution (constants)
@@ -235,7 +237,7 @@ if len(values_2) > 0:
     colors_2 = plt.cm.plasma(np.linspace(0.2, 0.9, len(names_2)))
     bars_2 = plt.barh(names_2, values_2, color=colors_2, edgecolor='black', linewidth=1.5)
     plt.xlabel('Relative contribution (%)')
-    plt.title('Parameter Sensitivity: Contribution to Emission Variability\n(Partial Correlation Method)', 
+    plt.title('Legacy Sensitivity Diagnostic: Normalized Absolute Spearman\n(Not an independent partial-correlation method)', 
               fontsize=23)
     plt.xlim(0, max(values_2) * 1.15)
     
@@ -341,12 +343,12 @@ print("\nAll plots saved successfully!")
 results_df = pd.DataFrame({
     'Parameter': list(sensitivities_pct.keys()),
     'Spearman Correlation (%)': list(sensitivities_pct.values()),
-    'Partial Correlation (%)': list(partial_contributions_pct.values())
+    'Legacy Duplicate Spearman (%)': list(partial_contributions_pct.values())
 })
 
 # Calculate average contribution
 results_df['Average Contribution (%)'] = (results_df['Spearman Correlation (%)'] + 
-                                          results_df['Partial Correlation (%)']) / 2
+                                          results_df['Legacy Duplicate Spearman (%)']) / 2
 
 # Sort by average contribution and filter out constant parameters (0 contribution)
 results_df = results_df[results_df['Average Contribution (%)'] > 0].sort_values('Average Contribution (%)', ascending=False)
