@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite the article below."
+title: "From avoided emissions to potential credits: helicopter-to-eVTOL substitution in São Paulo (code and data)"
+authors:
+  - family-names: Rodrigues
+    given-names: Jaqueline Fonseca
+  - family-names: Carvalho
+    given-names: Lucas Orbolato
+  - family-names: Gomes
+    given-names: Igor Galhano
+  - family-names: Pagani
+    given-names: Regina Negri
+  - family-names: Murça
+    given-names: Mayara Condé Rocha
+  - family-names: Caldeira
+    given-names: Samuel da Silva
+  - family-names: Guterres
+    given-names: Marcelo Xavier
+  - family-names: Pamplona
+    given-names: Daniel Alberto
+preferred-citation:
+  type: article
+  title: "From avoided emissions to potential credits: A simulation-based case study of helicopter-to-eVTOL substitution in São Paulo"
+  authors:
+    - family-names: Rodrigues
+      given-names: Jaqueline Fonseca
+    - family-names: Carvalho
+      given-names: Lucas Orbolato
+    - family-names: Gomes
+      given-names: Igor Galhano
+    - family-names: Pagani
+      given-names: Regina Negri
+    - family-names: Murça
+      given-names: Mayara Condé Rocha
+    - family-names: Caldeira
+      given-names: Samuel da Silva
+    - family-names: Guterres
+      given-names: Marcelo Xavier
+    - family-names: Pamplona
+      given-names: Daniel Alberto
+  journal: "Case Studies on Transport Policy"
+  volume: 25
+  start: 101884
+  year: 2026
+  doi: "10.1016/j.cstp.2026.101884"

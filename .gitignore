@@ -1,0 +1,12 @@
+# Generated results (recreate with: python run_all.py)
+output/*
+!output/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/

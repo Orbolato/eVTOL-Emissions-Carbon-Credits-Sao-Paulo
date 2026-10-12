@@ -1,0 +1,4 @@
+scenario,n_operations,simulation_time_s,total_flight_hours,total_3d_distance_nm,lowc_events,nmac_events,mac_events,cr_total_alerts,lowc_horizontal_m,nmac_horizontal_m,nmac_vertical_m,mac_horizontal_m,mac_vertical_m
+No conflict resolution,146,90050.0,18.525555555555556,2124.678443634556,20,9,1,0,500.0,150.0,30.0,10.0,30.0
+MVP 60 s,146,90050.0,18.50583333333333,2130.3684610408354,5,0,0,436,500.0,150.0,30.0,10.0,30.0
+MVP 120 s,146,90050.0,19.04388888888889,2196.8928528532915,5,1,0,492,500.0,150.0,30.0,10.0,30.0
